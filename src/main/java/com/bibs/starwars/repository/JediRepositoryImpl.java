@@ -40,7 +40,7 @@ public class JediRepositoryImpl implements JediRepository {
                         p.setId(rs.getInt("id"));
                         p.setName(rs.getString("name"));
                         p.setStrength(rs.getInt("strength"));
-                        p.setVersion(rs.getInt("version"));
+                        p.setVersion(rs.getString("version"));
                         return p;
                     });
 

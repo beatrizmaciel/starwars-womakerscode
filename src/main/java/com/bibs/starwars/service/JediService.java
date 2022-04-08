@@ -13,4 +13,8 @@ public class JediService {
 
     // repository
 
+    public void a(){
+        logger.info("{}Log do método", "qualquer coisa");
+    }
+
 }
