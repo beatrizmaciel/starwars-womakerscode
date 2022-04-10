@@ -36,7 +36,7 @@ public class JediService {
     }
 
     public Jedi save(Jedi jedi){
-        jedi.setVersion("1");
+        jedi.setVersion(1);
 
         logger.info("Update Jedi from system");
 

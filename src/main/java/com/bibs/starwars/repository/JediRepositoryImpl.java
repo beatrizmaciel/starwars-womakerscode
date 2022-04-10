@@ -33,7 +33,7 @@ public class JediRepositoryImpl implements JediRepository {
     }
 
     @Override
-    public Optional<Jedi> findById(int id) {
+    public Optional<Jedi> findById(Integer id) {
         try {
             Jedi jedi = jdbcTemplate.queryForObject("SELECT * FROM jedis WHERE id = ?",
                     new Object[]{id},
@@ -42,7 +42,7 @@ public class JediRepositoryImpl implements JediRepository {
                         p.setId(rs.getInt("id"));
                         p.setName(rs.getString("name"));
                         p.setStrength(rs.getInt("strength"));
-                        p.setVersion(rs.getString("version"));
+                        p.setVersion(rs.getInt("version"));
                         return p;
                     });
 
@@ -60,7 +60,7 @@ public class JediRepositoryImpl implements JediRepository {
                     jedi.setId(rs.getInt("id"));
                     jedi.setName(rs.getString("name"));
                     jedi.setStrength(rs.getInt("strength"));
-                    jedi.setVersion(rs.getString("version"));
+                    jedi.setVersion(rs.getInt("version"));
                     return jedi;
                 });
     }
@@ -85,13 +85,13 @@ public class JediRepositoryImpl implements JediRepository {
         Number newId = simpleJdbInsert.executeAndReturnKey(parameters);
 
         logger.info("Inserindo jedi na database. A chave gerada é: {}", newId);
-        jedi.setId((int) newId);
+        jedi.setId((Integer) newId);
 
         return jedi;
     }
 
     @Override
-    public boolean delete(int id) {
+    public boolean delete(Integer id) {
         return jdbcTemplate.update("DELETE FROM jedis WHERE id = ?", id) == 1;
     }
 

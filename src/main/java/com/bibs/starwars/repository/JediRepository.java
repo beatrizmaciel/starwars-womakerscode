@@ -8,7 +8,7 @@ import java.util.Optional;
 // Repository serve como interface
 public interface JediRepository {
 
-    Optional<Jedi> findById(int id);
+    Optional<Jedi> findById(Integer id);
 
     List<Jedi> findAll();
 
@@ -16,5 +16,5 @@ public interface JediRepository {
 
     Jedi save(Jedi jedi);
 
-    boolean delete(int id);
+    boolean delete(Integer id);
 }
