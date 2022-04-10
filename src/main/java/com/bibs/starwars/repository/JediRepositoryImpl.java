@@ -10,7 +10,9 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 // usamos a anotação só para o Repository de classe
@@ -23,7 +25,7 @@ public class JediRepositoryImpl implements JediRepository {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbInsert;
 
-    public JediRepositoryImpl(JdbcTemplate jdbcTemplate, DataSource dataSource){
+    public JediRepositoryImpl(JdbcTemplate jdbcTemplate, DataSource dataSource) {
         this.jdbcTemplate = jdbcTemplate;
         this.simpleJdbInsert = new SimpleJdbcInsert(dataSource)
                 .withTableName("jedis")
@@ -32,7 +34,7 @@ public class JediRepositoryImpl implements JediRepository {
 
     @Override
     public Optional<Jedi> findById(int id) {
-        try{
+        try {
             Jedi jedi = jdbcTemplate.queryForObject("SELECT * FROM jedis WHERE id = ?",
                     new Object[]{id},
                     (rs, rowNum) -> {
@@ -44,37 +46,60 @@ public class JediRepositoryImpl implements JediRepository {
                         return p;
                     });
 
-                    return Optional.of(jedi);
-        } catch(EmptyResultDataAccessException e) {
+            return Optional.of(jedi);
+        } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
     }
 
     @Override
     public List<Jedi> findAll() {
-        return null;
+        return jdbcTemplate.query("SELECT * FROM jedis",
+                (rs, rowNum) -> {
+                    Jedi jedi = new Jedi();
+                    jedi.setId(rs.getInt("id"));
+                    jedi.setName(rs.getString("name"));
+                    jedi.setStrength(rs.getInt("strength"));
+                    jedi.setVersion(rs.getString("version"));
+                    return jedi;
+                });
     }
 
     @Override
     public boolean update(Jedi jedi) {
-        return false;
+        return jdbcTemplate.update("UPDATE jedis SET name = ?, strength = ?, version = ? WHERE id = ?",
+
+                jedi.getName(),
+                jedi.getStrength(),
+                jedi.getVersion(),
+                jedi.getId()) == 1;
     }
 
     @Override
     public Jedi save(Jedi jedi) {
-        return null;
+        Map<String, Object> parameters = new HashMap<>(1);
+        parameters.put("name", jedi.getName());
+        parameters.put("strength", jedi.getStrength());
+        parameters.put("version", jedi.getVersion());
+
+        Number newId = simpleJdbInsert.executeAndReturnKey(parameters);
+
+        logger.info("Inserindo jedi na database. A chave gerada é: {}", newId);
+        jedi.setId((int) newId);
+
+        return jedi;
     }
 
     @Override
     public boolean delete(int id) {
-        return false;
+        return jdbcTemplate.update("DELETE FROM jedis WHERE id = ?", id) == 1;
     }
 
 }
 
 /* Precisamos de construtores para identificar o JDBC Template
-* (usamos como public JediRepositoryImpl(construtores)
-*
-* O DataSource (parte do SQL Javax) serve para fazer queries SQL dentro
-* do JDBC. Biblioteca que serve para construir tabelas.
-*/
+ * (usamos como public JediRepositoryImpl(construtores)
+ *
+ * O DataSource (parte do SQL Javax) serve para fazer queries SQL dentro
+ * do JDBC. Biblioteca que serve para construir tabelas.
+ */
