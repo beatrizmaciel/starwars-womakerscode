@@ -11,11 +11,6 @@ class StarWarsBootcampWomakersCodeApplicationTests {
 	@Autowired
 	private JediService jediService;
 
-	@Test
-	void contextLoads() {
-		jediService.a();
-	}
-
 
 
 }
