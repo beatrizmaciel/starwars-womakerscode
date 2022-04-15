@@ -75,6 +75,14 @@ public class JediTestController {
             .andExpect(status().isNotFound());
     }
 
+    // TODO: teste do POST com sucesso
+    // TODO: teste do PUT com sucesso
+    // TODO: teste do PUT com uma versão igual da ja existente - deve retornar conflito
+    // TODO: teste do PUT com erro - not found
+    // TODO: teste do delete com sucesso
+    // TODO: teste do delete com erro - deletar um id ja deletado
+    // TODO: teste do delete com erro - internal server error
+
     static String asJsonString(final Object obj) {
         try {
             return new ObjectMapper().writeValueAsString(obj);
