@@ -45,7 +45,7 @@ public class JediTestController {
     public void testGetJediByIdFoundSuccessfully() throws Exception{
 
         // cenario
-        Jedi mockJedi = new Jedi(1, "HanSolo", 10, 1);
+        Jedi mockJedi = new Jedi(1, "Obi-Wan Kenobi", 100, 1);
         Mockito.doReturn(Optional.of(mockJedi)).when(jediService).findById(1);
 
         // execução
@@ -58,8 +58,8 @@ public class JediTestController {
                 .andExpect(header().string(HttpHeaders.LOCATION,"/jedi/1"))
 
                 .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.name", is("HanSolo")))
-                .andExpect(jsonPath("$.strength", is(10)))
+                .andExpect(jsonPath("$.name", is("Obi-Wan Kenobi")))
+                .andExpect(jsonPath("$.strength", is(100)))
                 .andExpect(jsonPath("$.version", is(1)));
 
 
