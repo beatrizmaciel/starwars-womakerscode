@@ -65,6 +65,16 @@ public class JediTestController {
 
     }
 
+    @Test
+    @DisplayName("GET /jedi/1 - Not Found")
+    public void testGetJediByIdNotFound() throws Exception{
+
+        Mockito.doReturn(Optional.empty()).when(jediService).findById(1);
+
+        mockMvc.perform(get("/jedi/{1}",1))
+            .andExpect(status().isNotFound());
+    }
+
     static String asJsonString(final Object obj) {
         try {
             return new ObjectMapper().writeValueAsString(obj);
